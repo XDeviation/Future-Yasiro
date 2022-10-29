@@ -1,4 +1,6 @@
-<h1 align=cente> Future-Yasiro </h1>
+<div align="center">
+  <h1> Future-Yasiro </h1>
+</div>
 
 ---
 
