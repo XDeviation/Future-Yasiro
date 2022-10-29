@@ -1,4 +1,6 @@
-# Future-Yasiro
+<h1><center> Future-Yasiro </center></h1>
+
+---
 
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FXDeviation%2FFuture-Yasiro.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FXDeviation%2FFuture-Yasiro?ref=badge_shield)
 
