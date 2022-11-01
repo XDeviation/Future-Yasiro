@@ -1,1 +1,6 @@
 bin/go-cqhttp/*
+dist
+__pycache__
+*.log
+config.yml
+.vscode
