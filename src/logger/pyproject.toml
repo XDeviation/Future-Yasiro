@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "logger"
+version = "1.0.0"
+description = ""
+authors = ["XDeviation <191602098@qq.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
