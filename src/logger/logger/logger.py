@@ -1,27 +1,45 @@
+import os
 import logging
+import logging.handlers
 
 
 class Logger:
     def __init__(
-        self, name, ch_level=logging.DEBUG, fh_level=logging.INFO, log_file="log"
+        self,
+        name,
+        ch_level=logging.INFO,
+        fh_level=logging.DEBUG,
+        log_dir="logs",
+        log_file="log",
+        when="midnight",
+        interval=1,
+        backup_count=7,
     ):
+        if not os.path.exists(log_dir):
+            os.makedirs(log_dir)
+        log_file = os.path.join(log_dir, log_file)
         self.logger = logging.getLogger(name)
         self.logger.setLevel(logging.DEBUG)
-        # create file handler which logs even debug messages
-        fh = logging.FileHandler(log_file)
-        fh.setLevel(fh_level)
-        # create console handler with a higher log level
-        ch = logging.StreamHandler()
-        ch.setLevel(ch_level)
-        # create formatter and add it to the handlers
         formatter = logging.Formatter(
-            "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+            "%(asctime)s - [%(name)s:%(lineno)s] - %(levelname)s - %(message)s"
         )
-        fh.setFormatter(formatter)
-        ch.setFormatter(formatter)
+
+        # create file handler which logs even debug messages
+        file_handler = logging.handlers.TimedRotatingFileHandler(
+            log_file, when=when, interval=interval, backupCount=backup_count
+        )
+        file_handler.suffix = "%Y-%m-%d.log"
+        file_handler.setLevel(fh_level)
+        file_handler.setFormatter(formatter)
+
+        # create console handler with a higher log level
+        console_handler = logging.StreamHandler()
+        console_handler.setLevel(ch_level)
+        console_handler.setFormatter(formatter)
+
         # add the handlers to the logger
-        self.logger.addHandler(fh)
-        self.logger.addHandler(ch)
+        self.logger.addHandler(file_handler)
+        self.logger.addHandler(console_handler)
 
     def debug(self, msg):
         self.logger.debug(msg)
