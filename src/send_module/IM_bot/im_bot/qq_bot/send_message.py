@@ -1,6 +1,6 @@
 import requests
 from typing import Dict, Union
-from .config import QQ_BOT_API_URL
+from im_bot.qq_bot.config import QQ_BOT_API_URL
 from logger import Logger
 
 
