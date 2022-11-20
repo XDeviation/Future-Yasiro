@@ -1,5 +1,5 @@
 from logger import Logger
-from db_models import provide_session, Message
+from db_models.db_models import provide_session, Message
 from sqlalchemy.orm import Session
 from im_bot.qq_bot.send_message import QQMessageSender
 
@@ -14,7 +14,7 @@ class BotController:
         self.bots.append(QQMessageSender())
 
     @provide_session
-    def get_message(self, session: Session, message_id: int) -> Message:
+    def get_message(session: Session, self, message_id: int) -> Message:
         """
         get message from database
         :param session:

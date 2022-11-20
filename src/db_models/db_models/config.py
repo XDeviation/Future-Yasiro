@@ -1,7 +1,7 @@
 import yaml
 from logger import Logger
 
-logger = Logger(__name__, log_file="bot_controller.log")
+logger = Logger(__name__, log_file="db_models.log")
 
 logger.info("start loading config")
 with open("config.yml", "r") as stream:

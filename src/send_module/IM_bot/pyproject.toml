@@ -15,6 +15,7 @@ sqlalchemy = "^1.4.43"
 psycopg2 = "^2.9.5"
 backports-zoneinfo = "^0.2.1"
 logger = {path = "../../logger/dist/logger-1.1.3-py3-none-any.whl"}
+db-models = {path = "../../db_models/dist/db_models-0.1.0-py3-none-any.whl"}
 
 
 [build-system]

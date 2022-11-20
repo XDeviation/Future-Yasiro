@@ -1,16 +1,15 @@
 import datetime
-import enum
 from logger import Logger
 from functools import wraps
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy import Column, TEXT, TIMESTAMP, create_engine, Enum
+from sqlalchemy import Column, TEXT, TIMESTAMP, create_engine
 
-from im_bot.bot_controller.config import DB_URL
+from db_models.config import DB_URL
 
 base = declarative_base()
-logger = Logger(__name__, log_file="bot_controller.log")
+logger = Logger(__name__, log_file="db_models.log")
 
 
 class Message(base):
