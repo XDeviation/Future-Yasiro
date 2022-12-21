@@ -1,0 +1,15 @@
+# IM bot config file
+
+## db configs
+db_config:
+  host: localhost
+  port: 5432
+  user: postgres
+  password: default
+  database: default
+
+## qq bot configs
+qq_config:
+  host: 127.0.0.1
+  port: 5700
+  master: 100000000000

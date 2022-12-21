@@ -11,6 +11,9 @@ with open("config.yml", "r") as stream:
         logger.exception(exc)
         raise
 
+QQ_MASTER = config.get(
+    "master", None
+)  # QQ master, when init QQ bot will send a message to this ID
 QQ_BOT_API_HOST = config.get("host", "localhost")
 QQ_BOT_API_PORT = config.get("port", 8080)
 QQ_BOT_API_URL = f"{QQ_BOT_API_HOST}:{QQ_BOT_API_PORT}"

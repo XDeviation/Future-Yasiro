@@ -8,10 +8,17 @@ logger = Logger(__name__, log_file="bot_controller.log")
 
 
 class BotController:
-    def __init__(self):
+    @classmethod
+    async def create(cls):
         logger.info("init BotController")
+
+        self = BotController()
+
+        qq_bot = await QQMessageSender.create()
+        self.bots.append(qq_bot)
+
+    def __init__(self):
         self.bots = []
-        self.bots.append(QQMessageSender())
 
     @provide_session
     def get_message(session: Session, self, message_id: int) -> Message:
