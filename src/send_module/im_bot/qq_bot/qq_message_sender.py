@@ -1,7 +1,6 @@
-import retry
 import requests
 from typing import Dict, Union, List, Any
-from im_bot.qq_bot.config import QQ_BOT_API_URL, QQ_MASTER
+from .config import QQ_BOT_API_URL, QQ_MASTER
 from logger import Logger
 
 

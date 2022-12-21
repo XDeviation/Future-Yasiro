@@ -1,7 +1,7 @@
 from logger import Logger
-from db_models.db_models import provide_session, Message
+from db_models import provide_session, SendMessage
 from sqlalchemy.orm import Session
-from im_bot.qq_bot.send_message import QQMessageSender
+from ..qq_bot import QQMessageSender
 
 
 logger = Logger(__name__, log_file="bot_controller.log")
@@ -15,25 +15,25 @@ class BotController:
         self = BotController()
 
         qq_bot = await QQMessageSender.create()
-        self.bots.append(qq_bot)
+        self.bots["qq_message"] = qq_bot
 
     def __init__(self):
-        self.bots = []
+        self.bots = {}
 
     @provide_session
-    def get_message(session: Session, self, message_id: int) -> Message:
+    def get_message(session: Session, self, message_id: int) -> SendMessage:
         """
         get message from database
         :param session:
         :return:
         """
-        message = session.query(Message).first()
+        message = session.query(SendMessage).first()
         if message:
             session.delete(message)
             session.commit()
         return message
 
-    def send_group_message(self, message: Message):
+    def send_group_message(self, message: SendMessage):
         """
         send message to qq group
         :param message:

@@ -6,7 +6,7 @@ from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import Column, TEXT, TIMESTAMP, create_engine, BigInteger
 
-from db_models.config import DB_URL
+from .config import DB_URL
 
 base = declarative_base()
 logger = Logger(__name__, log_file="db_models.log")
@@ -17,6 +17,9 @@ class SendMessage(base):
     message_id = Column(BigInteger, primary_key=True)
     plugin_name = Column(TEXT)
     message = Column(TEXT)
+    message_type = Column(TEXT)
+    message_second_type = Column(TEXT)
+    user_id = Column(TEXT)
     time = Column(TIMESTAMP, default=datetime.datetime.utcnow)
 
     def to_dict(self):
