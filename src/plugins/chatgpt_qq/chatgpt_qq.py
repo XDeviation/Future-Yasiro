@@ -2,6 +2,7 @@ import os
 import openai
 import json
 import pickle
+import threading
 # import Future Yasiro improve package
 import sys
 # sys.path.append(r'd:\ChatGPT\Future-Yasiro\Future-Yasiro\src\plugins\chatgpt_qq')
@@ -138,8 +139,10 @@ def receive_message(user_info, message):
 #     print(completion.choices[0].message["content"])
 #     GlobalMessages.append(completion.choices[0].message)
 
-def main():
-    init()
+
+
+
+def run_personal():
     mq_connection = get_mq_connection()
     mq_channel = mq_connection.channel()
     mq_channel.queue_declare(queue=".gpt")
@@ -224,7 +227,9 @@ def main():
     mq_channel.start_consuming()
 
     mq_connection.close()
-    
+    pass
+
+def run_group():
     mq_connection_group = get_mq_connection()
     mq_channel_group = mq_connection_group.channel()
     mq_channel_group.queue_declare(queue=".gptg")
@@ -312,6 +317,19 @@ def main():
     mq_channel_group.start_consuming()
 
     mq_connection_group.close()
+    pass
+
+def main():
+    init()
+    # 创建两个新线程
+    thread1 = threading.Thread(target=run_personal)
+    thread2 = threading.Thread(target=run_group)
+
+    # 启动线程并等待线程结束
+    thread1.start()
+    thread2.start()
+    thread1.join()
+    thread2.join()
 
 # 下面是一段测试receive_message的代码
 # test_user_info = {
