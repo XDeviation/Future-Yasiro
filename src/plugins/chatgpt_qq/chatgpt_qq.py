@@ -119,8 +119,12 @@ def receive_message(user_info, message):
                 }
             })
             completion = None
-    pop_append(conversation, completion.choices[0].message)
-    send_message(user_info, completion.choices[0].message)
+    if completion == None:
+        pop_append(conversation, "ChatGPT has disconnected.")
+        send_message(user_info, "ChatGPT has disconnected.")
+    else:
+        pop_append(conversation, completion.choices[0].message)
+        send_message(user_info, completion.choices[0].message)
     # 更新聊天记录文件
     with open(DATA_FILE, 'wb') as f:
         pickle.dump(user_list, f)
@@ -244,7 +248,7 @@ def run_group():
             'age': 0, 
             'nickname': '群成员', 
             'sex': 'unknown', 
-            'user_id': 123456789
+            'user_id': message.get("group_id", 0)
         }
         # 信息格式为".gptg message"，应当去掉前五个字符
         message_text = message.get("message")[5:]
