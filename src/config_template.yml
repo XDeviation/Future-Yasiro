@@ -13,3 +13,11 @@ qq_config:
   host: 127.0.0.1
   port: 5700
   master: 100000000000
+
+## message queue configs
+mq_config:
+  host: localhost
+
+## rec server
+rec_server_config:
+  port: 3500

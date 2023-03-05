@@ -1,43 +1,58 @@
+from typing import Dict, Union, List, Any
 from logger import Logger
-from db_models import provide_session, SendMessage
-from sqlalchemy.orm import Session
 from ..qq_bot import QQMessageSender
 
 
 logger = Logger(__name__, log_file="bot_controller.log")
 
 
+class FakeBot:
+    def send_group_message(
+        self,
+        id: str,
+        message: Union[List[Dict[str, Any]], str],
+        auto_escape=False,
+    ) -> bool:
+        return True
+
+    def send_private_message(
+        self,
+        id: str,
+        message: Union[List[Dict[str, Any]], str],
+        auto_escape=False,
+    ) -> bool:
+        return True
+
+    def send_message(self, message: Union[List[Dict[str, Any]], str]) -> bool:
+        return True
+
+
 class BotController:
     @classmethod
-    async def create(cls):
+    def create(cls):
+
         logger.info("init BotController")
 
-        self = BotController()
+        controller = BotController()
+        qq_bot = QQMessageSender.create()
+        controller.bots["qq_message"] = qq_bot
 
-        qq_bot = await QQMessageSender.create()
-        self.bots["qq_message"] = qq_bot
+        return controller
 
     def __init__(self):
         self.bots = {}
 
-    @provide_session
-    def get_message(session: Session, self, message_id: int) -> SendMessage:
+    def send_message(self, message: Dict[str, Any]) -> None:
         """
-        get message from database
-        :param session:
-        :return:
-        """
-        message = session.query(SendMessage).first()
-        if message:
-            session.delete(message)
-            session.commit()
-        return message
-
-    def send_group_message(self, message: SendMessage):
-        """
-        send message to qq group
+        send message to group
         :param message:
+            :message_type: "qq_message"
+            :message: Union[List[Dict[str, Any]], str]
         :return:
         """
-        for bot in self.bots:
-            bot.send_group_message(message.message_id, message.message, False)
+        message_type = message["message_type"]
+        _message = message["message"]
+        logger.info(f"Send {message_type}")
+        logger.info(self.bots)
+        bot = self.bots.get(message_type, FakeBot())
+        bot.send_message(_message)

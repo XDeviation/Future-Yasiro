@@ -12,24 +12,11 @@ base = declarative_base()
 logger = Logger(__name__, log_file="db_models.log")
 
 
-class SendMessage(base):
-    __tablename__ = "send_message"
-    message_id = Column(BigInteger, primary_key=True)
-    plugin_name = Column(TEXT)
-    message = Column(TEXT)
-    message_type = Column(TEXT)
-    message_second_type = Column(TEXT)
-    user_id = Column(TEXT)
-    time = Column(TIMESTAMP, default=datetime.datetime.utcnow)
-
-    def to_dict(self):
-        return {k: v for k, v in self.__dict__.items() if not k.startswith("_")}
-
-
 class PluginToUser(base):
     __tablename__ = "plugin_to_user"
     id = Column(BigInteger, primary_key=True)
     plugin_name = Column(TEXT)
+    plugin_config = Column(TEXT)
     user_type = Column(TEXT)
     user_id = Column(TEXT)
 
