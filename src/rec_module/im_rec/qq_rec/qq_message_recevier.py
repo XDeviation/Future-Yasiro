@@ -1,3 +1,4 @@
+import re
 import json
 from fastapi import APIRouter, Request
 from logger import Logger
@@ -14,14 +15,18 @@ async def qq_rec(req: Request):
     message_detail = message.get("message", "")
     if post_type != 'message' or not message_detail.startswith('.'):
         return {}
-    message_queue = message_detail.split(' ')[0]
+    try:
+        message_queue = re.split(' |\n|\t', message_detail)[0]
 
-    logger.info(f"Receive command {message_queue}, send it to queue")
-    queue_connection = get_mq_connection()
-    channel = queue_connection.channel()
-    channel.queue_declare(queue=message_queue)
-    channel.basic_publish(exchange='',
-                      routing_key=message_queue,
-                      body=json.dumps(message))
-    logger.info(f"Done.")
+        logger.info(f"Receive command {message_queue}, send it to queue")
+        queue_connection = get_mq_connection()
+        channel = queue_connection.channel()
+        channel.queue_declare(queue=message_queue)
+        channel.basic_publish(exchange='',
+                        routing_key=message_queue,
+                        body=json.dumps(message))
+        logger.info(f"Done.")
+    except Exception as e:
+        logger.exception(e)
+        return {}
     return {}
