@@ -120,8 +120,8 @@ def receive_message(user_info, message):
             })
             completion = None
     if completion == None:
-        pop_append(conversation, "ChatGPT has disconnected.")
-        send_message(user_info, "ChatGPT has disconnected.")
+        pop_append(conversation, {"content":"ChatGPT has disconnected."})
+        send_message(user_info, {"content":"ChatGPT has disconnected."})
     else:
         pop_append(conversation, completion.choices[0].message)
         send_message(user_info, completion.choices[0].message)
