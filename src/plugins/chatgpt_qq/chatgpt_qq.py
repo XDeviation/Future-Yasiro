@@ -100,7 +100,7 @@ def receive_message(user_info, message):
     if in_list == False:
         conversation = add_new_user(user_info, message)
     # 当距离上次对话过久，清除当前对话的上下文，以节省token资源
-    last_time = conversation["last_time"]
+    last_time = conversation.get("last_time")
     cur_time = time.time()
     clean_flag = 1
     if last_time != None:
