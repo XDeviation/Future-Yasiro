@@ -14,5 +14,6 @@ with open("config.yml", "r") as stream:
 DATA_FILE = config.get("data_file", "")
 CHATGPT_API_KEY = config.get("key", "")
 TOKEN_LIMIT = config.get("token_limit", 4096)
+CONTEXT_TIME_LIMIT = config.get("context_time_limit", 1800)
 
 # logger.info("load config success")

@@ -3,13 +3,14 @@ import openai
 import json
 import pickle
 import threading
+import time
 # import Future Yasiro improve package
 import sys
 # sys.path.append(r'd:\ChatGPT\Future-Yasiro\Future-Yasiro\src\plugins\chatgpt_qq')
 sys.path.append('../../')
 from logger import Logger
 from mq_utils import get_mq_connection
-from config import CHATGPT_API_KEY, DATA_FILE, TOKEN_LIMIT
+from config import CHATGPT_API_KEY, DATA_FILE, TOKEN_LIMIT, CONTEXT_TIME_LIMIT
 
 # You can find your log in src/logs/{log_file}
 logger = Logger(__name__, log_file="chatgpt_qq.log")
@@ -37,7 +38,8 @@ message_cache = ""
 #             },
 #             ...
 #         ],
-#         "tokens": string2token(all_messages)
+#         "tokens": string2token(all_messages),
+#         "last_time": last_time
 #     },
 #     ...
 # ]
@@ -58,11 +60,13 @@ def init():
 
 def add_new_user(user_info, message):
     # 一个新用户发来一条消息
-    context = [{"role": "user", "content": message}]
+    # context = [{"role": "user", "content": message}]
+    context = []
     conversation = {
         "user_info": user_info,
         "context": context,
-        "tokens": string2token(message)
+        "tokens": 0,    # string2token(message),
+        "last_time": None
     }
     user_list.append(conversation)
     return conversation
@@ -95,6 +99,17 @@ def receive_message(user_info, message):
             break
     if in_list == False:
         conversation = add_new_user(user_info, message)
+    # 当距离上次对话过久，清除当前对话的上下文，以节省token资源
+    last_time = conversation["last_time"]
+    cur_time = time.time()
+    clean_flag = 1
+    if last_time != None:
+        if cur_time - last_time < CONTEXT_TIME_LIMIT:
+            clean_flag = 0
+    if clean_flag:
+        conversation["context"] = []
+        conversation["tokens"] = 0
+    conversation["last_time"] = cur_time
     # 维护上下文，根据收到的信息进行回复
     pop_append(conversation, {"role": "user", "content": message})
     completion = None
@@ -120,8 +135,8 @@ def receive_message(user_info, message):
             })
             completion = None
     if completion == None:
-        pop_append(conversation, {"content":"ChatGPT has disconnected."})
-        send_message(user_info, {"content":"ChatGPT has disconnected."})
+        pop_append(conversation, {"role": "assistant", "content":"ChatGPT has disconnected."})
+        send_message(user_info, {"role": "assistant", "content":"ChatGPT has disconnected."})
     else:
         pop_append(conversation, completion.choices[0].message)
         send_message(user_info, completion.choices[0].message)
