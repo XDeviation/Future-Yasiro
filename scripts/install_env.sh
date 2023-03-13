@@ -26,6 +26,8 @@ installPostgresql() {
 installPoetry() {
     sudo apt install -y python3-pip
     curl -sSL https://install.python-poetry.org | python3 -
+    echo "export PATH=\$PATH:\$HOME/.local/bin" >>$HOME/.bashrc
+    echo "export PATH=\$PATH:\$HOME/.local/bin" >>$HOME/.zshrc
 }
 
 echo "---------- install go-cqhttp ----------"
