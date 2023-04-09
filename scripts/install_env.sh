@@ -22,12 +22,17 @@ installPostgresql() {
     sudo apt-get -y install postgresql postgresql-client
 }
 
-# init python env
+# install poetry
 installPoetry() {
     sudo apt install -y python3-pip
     curl -sSL https://install.python-poetry.org | python3 -
     echo "export PATH=\$PATH:\$HOME/.local/bin" >>$HOME/.bashrc
     echo "export PATH=\$PATH:\$HOME/.local/bin" >>$HOME/.zshrc
+}
+
+# init python env
+pipInstall() {
+    pip install -r src/requirements.txt
 }
 
 echo "---------- install go-cqhttp ----------"
@@ -36,3 +41,5 @@ echo "---------- install docker ----------"
 installDocker
 echo "---------- install postgresql ----------"
 installPostgresql
+echo "---------- install python env ----------"
+pipInstall
