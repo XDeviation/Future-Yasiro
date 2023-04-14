@@ -55,6 +55,8 @@ def init():
         with open(DATA_FILE, 'rb') as f:
             user_list = pickle.load(f)
     except FileNotFoundError:
+        with open(DATA_FILE, 'w'):
+            pass
         user_list = []
     return
 

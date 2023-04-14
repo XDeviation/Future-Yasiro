@@ -2,9 +2,9 @@
 set -e
 
 echo "----------Start Rabbitmq server----------"
-sudo service rabbitmq-server start
+# sudo service rabbitmq-server start
 # If use docker run this
-# docker run -it -d --rm --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3.11-management
+docker run -it -d --rm --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3.11-management
 
 echo "----------Start go-cqhttp----------"
 cd bin/go-cqhttp
@@ -23,7 +23,9 @@ nohup python3 rec_module >/dev/null 2>&1 &
 echo "----------Start Send module----------"
 nohup python3 send_module >/dev/null 2>&1 &
 
+export ALL_PROXY="http://172.17.176.1:7890"
+
 for package in $PWD/plugins/*; do
     echo "----------Running $package----------"
-    nohup python $package >/dev/null 2>&1 &
+    nohup python3 $package >/dev/null 2>&1 &
 done
