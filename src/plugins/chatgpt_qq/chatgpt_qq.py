@@ -96,7 +96,7 @@ def receive_message(user_info, message):
     conversation = {}
     for conv in user_list:
         if user_info["sender"]["nickname"] == "群成员":
-            if user_info["sender"]["nickname"] == "群成员":
+            if conv["user_info"]["sender"]["nickname"] == "群成员":
                 logger.info({
                     "action":"comparing two group",
                     "A":user_info,
@@ -248,7 +248,7 @@ def run_personal():
             routing_key="send_message",
             body=json.dumps(return_msg)
         )
-        logger.info(f"Send message {return_msg}")
+        # logger.info(f"Send message {return_msg}")
 
     mq_channel.basic_consume(
         queue=".gpt", on_message_callback=callback, auto_ack=True
