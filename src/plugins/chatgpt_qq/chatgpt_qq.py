@@ -95,6 +95,14 @@ def receive_message(user_info, message):
     in_list = False
     conversation = {}
     for conv in user_list:
+        if user_info["sender"]["nickname"] == "群成员":
+            if user_info["sender"]["nickname"] == "群成员":
+                logger.info({
+                    "action":"comparing two group",
+                    "A":user_info,
+                    "B":conv["user_info"],
+                    "result":user_info == conv["user_info"]
+                })
         if user_info == conv["user_info"]:
             in_list = True
             conversation = conv
@@ -285,6 +293,10 @@ def run_group():
             }
         })
 
+        logger.info({
+            "fake user_info: ": user_info,
+        })
+
         receive_message(user_info, message_text)
             
         logger.info({
@@ -330,7 +342,7 @@ def run_group():
             routing_key="send_message",
             body=json.dumps(return_msg)
         )
-        logger.info(f"Send message {return_msg}")
+        # logger.info(f"Send message {return_msg}")
 
     mq_channel_group.basic_consume(
         queue=".gptg", on_message_callback=callback_group, auto_ack=True
