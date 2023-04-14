@@ -3,7 +3,7 @@ set -ex
 # install go-cqhttp
 inctallGoCqhttp() {
     mkdir bin
-    wget https://github.com/Mrs4s/go-cqhttp/releases/download/v1.0.0-rc4/go-cqhttp_linux_amd64.tar.gz -O bin/go-cqhttp.tar.gz
+    wget https://github.com/Mrs4s/go-cqhttp/releases/download/v1.0.0/go-cqhttp_linux_amd64.tar.gz -O bin/go-cqhttp.tar.gz
     mkdir ./bin/go-cqhttp/
     tar -xzvf ./bin/go-cqhttp.tar.gz -C ./bin/go-cqhttp/
     rm ./bin/go-cqhttp.tar.gz
@@ -22,12 +22,17 @@ installPostgresql() {
     sudo apt-get -y install postgresql postgresql-client
 }
 
-# init python env
+# install poetry
 installPoetry() {
     sudo apt install -y python3-pip
     curl -sSL https://install.python-poetry.org | python3 -
     echo "export PATH=\$PATH:\$HOME/.local/bin" >>$HOME/.bashrc
     echo "export PATH=\$PATH:\$HOME/.local/bin" >>$HOME/.zshrc
+}
+
+# init python env
+pipInstall() {
+    pip install -r src/requirements.txt
 }
 
 echo "---------- install go-cqhttp ----------"
@@ -36,3 +41,5 @@ echo "---------- install docker ----------"
 installDocker
 echo "---------- install postgresql ----------"
 installPostgresql
+echo "---------- install python env ----------"
+pipInstall
